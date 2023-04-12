@@ -9,6 +9,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    var calcBrain = CalcBrain();
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -23,6 +25,7 @@ class ViewController: UIViewController {
         if lblOutput.text == "0" {
             lblOutput.text = ""
         }
+        
         if PerformOperation == true {
             if sender.tag == 10 {
                 lblOutput.text = "."
@@ -31,6 +34,7 @@ class ViewController: UIViewController {
                 lblOutput.text = String(sender.tag)
             }
             NumberOnScreen = Double(lblOutput.text!)!
+            calcBrain.NumberOnScreen = NumberOnScreen
             PerformOperation = false
         }
         else {
@@ -41,13 +45,14 @@ class ViewController: UIViewController {
                 lblOutput.text = lblOutput.text! + String(sender.tag)
             }
            NumberOnScreen = Double(lblOutput.text!)!
-        }
+           calcBrain.NumberOnScreen = NumberOnScreen        }
     }
     
     @IBAction func btnOperationClick(_ sender: UIButton) {
         if lblOutput.text != "" && sender.tag != 11 && sender.tag != 16
         {
             PreviousNumber = Double(lblOutput.text!)!
+            calcBrain.PreviousNumber = PreviousNumber
             if sender.tag == 12 {
                 lblOutput.text = "/";
             }
@@ -71,29 +76,33 @@ class ViewController: UIViewController {
             }
             else if sender.tag == 16 {
                 if operation == 12 {
-                    lblOutput.text = String(PreviousNumber / NumberOnScreen)
-                    if lblOutput.text == "inf" {
-                        lblOutput.text = "ERROR"
-                    }
+                    calcBrain.division()
+                    lblOutput.text = calcBrain.displayValue
                 }
                 else if operation == 13 {
-                    lblOutput.text = String(PreviousNumber * NumberOnScreen)
+                    calcBrain.multiplication()
+                    lblOutput.text = calcBrain.displayValue
                 }
                 else if operation == 14 {
-                    lblOutput.text = String(PreviousNumber - NumberOnScreen)
+                    calcBrain.subtraction()
+                    lblOutput.text = calcBrain.displayValue
                 }
                 else if operation == 15 {
-                    lblOutput.text = String(PreviousNumber + NumberOnScreen)
+                    calcBrain.addition()
+                    lblOutput.text = calcBrain.displayValue
                 }
                 else if operation == 17 {
-                    lblOutput.text = String(PreviousNumber / 100)
+                    calcBrain.divideBy100()
+                    lblOutput.text = calcBrain.displayValue
                 }
                 else if operation == 18 {
-                    lblOutput.text = String(PreviousNumber * (-1))
+                    calcBrain.negativeFunc()
+                    lblOutput.text = calcBrain.displayValue
                 }
             }
             else if sender.tag == 11 {
-                lblOutput.text = "0"
+                calcBrain.clearAll()
+                lblOutput.text = calcBrain.displayValue
                 PreviousNumber = 0;
                 NumberOnScreen = 0;
                 operation = 0;
@@ -101,4 +110,3 @@ class ViewController: UIViewController {
             }
         }
     }
-
